@@ -1,0 +1,36 @@
+{
+  "name": "upgrade_js",
+  "version": "1.0.0",
+  "description": "Data structure, JS, TS, algorithms.",
+  "main": "index.js",
+  "scripts": {    
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Timur-eit/upgrade_js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Timur-eit/upgrade_js/issues"
+  },
+  "homepage": "https://github.com/Timur-eit/upgrade_js#readme",
+  "dependencies": {
+    "babel-jest": "^27.4.6",
+    "jest": "^27.4.7",
+    "typescript": "^4.5.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.12",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/jest": "^27.4.0"
+  }
+}
