@@ -10,6 +10,7 @@ export type LinkedList = {
     appendNode: (data: unknown) => void;
     prependNode: (data: unknown) => void;
     deleteNode: (data: unknown) => void;
+    findNode: (data: unknown) => void;
 }
 
 export function createLinkedList(): LinkedList {
@@ -18,22 +19,39 @@ export function createLinkedList(): LinkedList {
         const newNode: ListNode = {
             data,
             next: null,
-        }
+        };
 
         if (!list.head || !list.tail) {
             list.head = newNode;
             list.tail = newNode;
         }
-        
+
         list.tail.next = newNode;
         list.tail = newNode;
     };
 
     const prependNode = (data: unknown) => {
-        return;
+        
+        const prevHead = list.head;
+        
+        const newNode: ListNode = {
+            data,
+            next: prevHead,
+        };
+        
+        list.head = newNode;
+        list.head.next = prevHead;
+
+        if (!list.tail) {
+            list.tail = newNode;
+        }
     };
 
     const deleteNode = (data: unknown) => {
+        return;
+    };
+
+    const findNode = (data: unknown) => {
         return;
     };
 
@@ -43,6 +61,7 @@ export function createLinkedList(): LinkedList {
         appendNode,
         prependNode,
         deleteNode,
+        findNode,
     };
 
     return list;
