@@ -5,6 +5,7 @@ describe('createLinkedList', () => {
     const data1 = 'Data_1';
     const data2 = 'Data_2';
     const data3 = 'Data_3';    
+    const data4 = 'Data_4';    
     
     it('should return object with head, tail, appendNode, prependNode, deleteNode', () => {
 
@@ -16,6 +17,7 @@ describe('createLinkedList', () => {
         expect(linkedList).toHaveProperty('prependNode');
         expect(linkedList).toHaveProperty('deleteNode');
         expect(linkedList).toHaveProperty('findNode');
+        expect(linkedList).toHaveProperty('toArray');
 
     });
 
@@ -37,6 +39,7 @@ describe('createLinkedList', () => {
         expect(linkedList.head?.next?.data).toEqual(data2);
         expect(linkedList.head?.data).toEqual(data1);
         expect(linkedList.tail?.next).toBeNull();
+        
     });
 
     it('prependNode method should receive any data, create a new nodeList and put it in the start of list', () => {
@@ -59,4 +62,20 @@ describe('createLinkedList', () => {
         expect(linkedList.tail?.data).toEqual(data1);
         expect(linkedList.head?.next).not.toBeNull();
     });
+
+    it('toArray should return array with all nodes', () => {
+        const linkedList = createLinkedList();
+        linkedList.appendNode(data1);
+        linkedList.appendNode(data2);
+        linkedList.appendNode(data3);
+        linkedList.appendNode(data4);
+
+        const nodesArray = linkedList.toArray();
+
+        expect(nodesArray.length).toEqual(3);
+        expect(nodesArray[0].data).toEqual(data1);
+        expect(nodesArray[2].data).toEqual(data3);
+        expect(nodesArray[1].next).not.toBeNull();
+        expect(nodesArray[2].next?.next).toBeNull();
+    })
 });

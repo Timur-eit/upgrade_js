@@ -1,7 +1,10 @@
-export type ListNode = {
+class ListNode {
     data: unknown;
     next: null | ListNode;
-    prev?: null | ListNode;
+    constructor(data: unknown, next?: null | ListNode) {
+        this.data = data;
+        this.next = next !== undefined ? next : null;
+    }
 }
 
 export type LinkedList = {
@@ -11,34 +14,27 @@ export type LinkedList = {
     prependNode: (data: unknown) => void;
     deleteNode: (data: unknown) => void;
     findNode: (data: unknown) => void;
+    toArray: () => Array<ListNode>;
 }
+
 
 export function createLinkedList(): LinkedList {
 
     const appendNode = (data: unknown) => {
-        const newNode: ListNode = {
-            data,
-            next: null,
-        };
-
+        const newNode: ListNode = new ListNode(data);
+        
         if (!list.head || !list.tail) {
             list.head = newNode;
             list.tail = newNode;
         }
-
         list.tail.next = newNode;
         list.tail = newNode;
     };
 
     const prependNode = (data: unknown) => {
-        
         const prevHead = list.head;
-        
-        const newNode: ListNode = {
-            data,
-            next: prevHead,
-        };
-        
+        const newNode = new ListNode(data, prevHead);    
+
         list.head = newNode;
         list.head.next = prevHead;
 
@@ -55,6 +51,19 @@ export function createLinkedList(): LinkedList {
         return;
     };
 
+    const toArray = () => {
+        const result = [];
+        let currentNode = list.head;
+
+        if (currentNode) {
+            while (currentNode?.next !== null) {
+                result.push(currentNode);
+                currentNode = currentNode?.next;
+            }
+        }
+        return result;
+    }
+
     const list: LinkedList = {
         head: null,
         tail: null,
@@ -62,6 +71,7 @@ export function createLinkedList(): LinkedList {
         prependNode,
         deleteNode,
         findNode,
+        toArray,
     };
 
     return list;
