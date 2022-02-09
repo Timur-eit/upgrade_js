@@ -1,4 +1,4 @@
-import { createLinkedList } from '../data_structures/linkedList';
+import { createLinkedList } from '../../data_structures/linkedList';
 
 describe('createLinkedList', () => {
     

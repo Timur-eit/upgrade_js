@@ -45,14 +45,10 @@ export function createLinkedList(): LinkedList {
             list.tail = newNode;
         }
     };
-
-    const deleteNode: ListDataHandleMethod = (data) => {
-        return;
-    };
-
+    
     const findNode: ListFindMethod = (data) => {
         let currentNode = list.head;
-
+        
         if (currentNode) {
             while (currentNode) {
                 if (currentNode.data === data) {
@@ -63,10 +59,11 @@ export function createLinkedList(): LinkedList {
         }
         return null;
     };
-
+    
     const toArray = () => {
         const result = [];
         let currentNode = list.head;
+        
         if (currentNode) {
             while (currentNode.next) {
                 result.push(currentNode);
@@ -76,6 +73,10 @@ export function createLinkedList(): LinkedList {
         }
         return result;
     }
+    
+    const deleteNode: ListDataHandleMethod = (data) => {
+        return;
+    };
 
     const list: LinkedList = {
         head: null,
