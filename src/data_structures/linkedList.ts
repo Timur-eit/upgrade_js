@@ -7,22 +7,25 @@ class ListNode {
     }
 }
 
+type ListDataHandleMethod = <Type>(data: Type) => void;
+type ListFindMethod = <Type>(data: Type) => ListNode | null;
+
 export type LinkedList = {
     head: null | ListNode;
     tail: null | ListNode;
-    appendNode: (data: unknown) => void;
-    prependNode: (data: unknown) => void;
-    deleteNode: (data: unknown) => void;
-    findNode: (data: unknown) => void;
+    appendNode: ListDataHandleMethod;
+    prependNode: ListDataHandleMethod;
+    deleteNode: ListDataHandleMethod;
+    findNode: ListFindMethod;
     toArray: () => Array<ListNode>;
 }
 
 
 export function createLinkedList(): LinkedList {
 
-    const appendNode = (data: unknown) => {
+    const appendNode: ListDataHandleMethod = (data) => {
         const newNode: ListNode = new ListNode(data);
-        
+
         if (!list.head || !list.tail) {
             list.head = newNode;
             list.tail = newNode;
@@ -31,9 +34,9 @@ export function createLinkedList(): LinkedList {
         list.tail = newNode;
     };
 
-    const prependNode = (data: unknown) => {
+    const prependNode: ListDataHandleMethod = (data) => {
         const prevHead = list.head;
-        const newNode = new ListNode(data, prevHead);    
+        const newNode = new ListNode(data, prevHead);
 
         list.head = newNode;
         list.head.next = prevHead;
@@ -43,23 +46,33 @@ export function createLinkedList(): LinkedList {
         }
     };
 
-    const deleteNode = (data: unknown) => {
+    const deleteNode: ListDataHandleMethod = (data) => {
         return;
     };
 
-    const findNode = (data: unknown) => {
-        return;
+    const findNode: ListFindMethod = (data) => {
+        let currentNode = list.head;
+
+        if (currentNode) {
+            while (currentNode) {
+                if (currentNode.data === data) {
+                    return currentNode;
+                }
+                currentNode = currentNode.next;
+            }
+        }
+        return null;
     };
 
     const toArray = () => {
         const result = [];
         let currentNode = list.head;
-
         if (currentNode) {
-            while (currentNode?.next !== null) {
+            while (currentNode.next) {
                 result.push(currentNode);
-                currentNode = currentNode?.next;
+                currentNode = currentNode.next;
             }
+            result.push(currentNode);
         }
         return result;
     }

@@ -65,17 +65,40 @@ describe('createLinkedList', () => {
 
     it('toArray should return array with all nodes', () => {
         const linkedList = createLinkedList();
+        
+        let nodesArray = linkedList.toArray();
+        
+        expect(nodesArray.length).toEqual(0);
+
         linkedList.appendNode(data1);
         linkedList.appendNode(data2);
         linkedList.appendNode(data3);
         linkedList.appendNode(data4);
 
-        const nodesArray = linkedList.toArray();
+        nodesArray = linkedList.toArray();
 
-        expect(nodesArray.length).toEqual(3);
+        expect(nodesArray.length).toEqual(4);
         expect(nodesArray[0].data).toEqual(data1);
         expect(nodesArray[2].data).toEqual(data3);
         expect(nodesArray[1].next).not.toBeNull();
-        expect(nodesArray[2].next?.next).toBeNull();
-    })
+        expect(nodesArray[3].next).toBeNull();
+    });
+
+    it('find should return node with data which received as argument or should return null incase data was not found', () => {
+        const linkedList = createLinkedList();
+        
+        expect(linkedList.findNode(data1)).toBeNull();
+        
+        linkedList.appendNode(data1);
+        linkedList.appendNode(data2);
+        linkedList.appendNode(data3);
+        linkedList.prependNode(data4);
+
+        expect(linkedList.findNode(data3)?.data).toEqual(data3);
+        expect(linkedList.findNode(data2)?.data).toEqual(data2);
+        expect(linkedList.findNode(data1)?.data).toEqual(data1);
+        expect(linkedList.findNode(data4)?.data).toEqual(data4);
+        expect(linkedList.findNode('qwe')).toBeNull();
+
+    });
 });
