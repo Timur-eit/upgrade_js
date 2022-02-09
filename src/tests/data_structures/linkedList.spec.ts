@@ -11,8 +11,8 @@ describe('createLinkedList', () => {
 
         const linkedList = createLinkedList();
 
-        expect(linkedList).toHaveProperty('head');
-        expect(linkedList).toHaveProperty('tail');
+        expect(linkedList).toHaveProperty('head', null);
+        expect(linkedList).toHaveProperty('tail', null);
         expect(linkedList).toHaveProperty('appendNode');
         expect(linkedList).toHaveProperty('prependNode');
         expect(linkedList).toHaveProperty('deleteNode');
