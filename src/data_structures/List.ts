@@ -1,9 +1,9 @@
-export interface List<T> extends Iterable<T> {
-  push(value: T): void;
-  unshift(value: T): void;
-  map<K>(cb: (value: T) => K): List<K>;
-  find(cb: (value: T) => boolean): T | undefined;
-  // reduce reduceRight filter every some includes reverse sort pop unshift indexOf foreach slice splice
+export interface List<T> extends Iterable<T> {      
+    push(value: T): void;
+    unshift(value: T): void;
+    map<K>(cb: (value: T) => K): List<K>;
+    find(cb: (value: T) => boolean): T | undefined;
+    // reduce reduceRight filter every some includes reverse sort pop unshift indexOf foreach slice splice
 }
 
 const l1: List<string> = ["foobar", "baz", "qwerty"];
@@ -17,7 +17,7 @@ type ListNode<T> = {
   next: ListNode<T> | null;
 }
 
-class LinkedList<T> implements List<T> {
+export class LinkedList<T> implements List<T> {
     private head: ListNode<T> | null = null;
     private tail: ListNode<T> | null = null;
     
@@ -70,7 +70,19 @@ class LinkedList<T> implements List<T> {
     }
     
     public unshift(value: T): void {
-
+        const newNode: ListNode<T> = {
+            value: value,
+            prev: null,
+            next: this.head,
+        };
+        
+        if (!this.head || !this.tail) {
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            this.head.prev = newNode;
+            this.head = newNode;
+        }
     }
     
     public map<K>(cb: (value: T) => K): List<K> {
@@ -92,12 +104,15 @@ class LinkedList<T> implements List<T> {
 
 const l2: List<string> = new LinkedList<string>();
 
-l2.push("1");
-l2.push("2");
-l2.push("3");
-l2.push("4");
+// console.log('new list', l2);
 
-console.log(Array.from(l2));
+// l2.push("1");
+// l2.push("2");
+// l2.push("3");
+// l2.push("4");
+
+// console.log(Array.from(l2));
+// console.log(l2);
 
 // for(const x of l2) {
 //   console.log(">>>>>", x);
