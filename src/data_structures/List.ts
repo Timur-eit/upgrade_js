@@ -2,13 +2,13 @@ export interface List<T> extends Iterable<T> {
     push(value: T): void;
     unshift(value: T): void;
     map<K>(cb: (value: T) => K): List<K>;
-    find(cb: (value: T) => boolean): T | undefined;
+    find(cb: (value: T) => boolean): T | undefined;    
     /*
     reduce
     reduceRight
-    filter
-    every
-    some
+    // filter
+    // every
+    // some
     includes
     reverse
     sort
@@ -20,6 +20,8 @@ export interface List<T> extends Iterable<T> {
     splice
     */
    filter(cb: (value: T) => boolean): List<T>;
+   every(cb: (value: T) => boolean): boolean;
+   some(cb: (value: T) => boolean): boolean;
 }
 
 const l1: List<string> = ["foobar", "baz", "qwerty"];
@@ -135,7 +137,29 @@ export class LinkedList<T> implements List<T> {
             current = current.next;
         }
         return result;
-    }    
+    }
+
+    public every(cb: (value: T) => boolean): boolean {
+        let current = this.head;
+        while(current) {
+            if (!cb(current.value)) {
+                return false;
+            }
+            current = current.next;
+        }
+        return true;
+    }
+
+    public some(cb: (value: T) => boolean): boolean {
+        let current = this.head;
+        while(current) {
+            if (cb(current.value)) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
   
 }
 
