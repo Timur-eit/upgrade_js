@@ -9,7 +9,7 @@ export interface List<T> extends Iterable<T> {
     // filter
     // every
     // some
-    includes
+    // includes
     reverse
     sort
     pop
@@ -22,6 +22,7 @@ export interface List<T> extends Iterable<T> {
    filter(cb: (value: T) => boolean): List<T>;
    every(cb: (value: T) => boolean): boolean;
    some(cb: (value: T) => boolean): boolean;
+   includes(value: T): boolean;
 }
 
 const l1: List<string> = ["foobar", "baz", "qwerty"];
@@ -160,6 +161,17 @@ export class LinkedList<T> implements List<T> {
         }
         return false;
     }
+
+    public includes(value: T): boolean {
+        let current = this.head;
+        while(current) {
+            if (current.value === value) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    };
   
 }
 
