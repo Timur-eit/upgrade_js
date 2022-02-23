@@ -205,3 +205,5 @@ const l2: List<string> = new LinkedList<string>();
 //   console.log(curr.value);
 //   curr = curr.prev;
 // }
+
+console.log('Hello, World!');
