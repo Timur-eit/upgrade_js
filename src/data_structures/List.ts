@@ -3,7 +3,23 @@ export interface List<T> extends Iterable<T> {
     unshift(value: T): void;
     map<K>(cb: (value: T) => K): List<K>;
     find(cb: (value: T) => boolean): T | undefined;
-    // reduce reduceRight filter every some includes reverse sort pop unshift indexOf foreach slice splice
+    /*
+    reduce
+    reduceRight
+    filter
+    every
+    some
+    includes
+    reverse
+    sort
+    pop
+    unshift
+    indexOf 
+    foreach
+    slice
+    splice
+    */
+   filter(cb: (value: T) => boolean): List<T>;
 }
 
 const l1: List<string> = ["foobar", "baz", "qwerty"];
@@ -97,12 +113,36 @@ export class LinkedList<T> implements List<T> {
     }
     
     public find(cb: (value: T) => boolean): T | undefined {
-      return undefined;
+        let result: T | undefined = undefined;
+        let current = this.head;
+        while(current) {
+            if (cb(current.value)) {
+                result = current.value;
+                break;
+            }
+            current = current.next;
+        }
+        return result;
     }
+
+    public filter(cb: (value: T) => boolean): List<T> {
+        const result = new LinkedList<T>();
+        let current = this.head;
+        while(current) {
+            if (cb(current.value)) {
+                result.push(current.value);
+            }
+            current = current.next;
+        }
+        return result;
+    }    
   
 }
 
 const l2: List<string> = new LinkedList<string>();
+
+// const l2Iterable = Array.from(l2);
+// console.log(l2Iterable);
 
 // console.log('new list', l2);
 
