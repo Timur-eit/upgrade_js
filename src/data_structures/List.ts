@@ -37,8 +37,8 @@ type ListNode<T> = {
 }
 
 export class LinkedList<T> implements List<T> {
-    private head: ListNode<T> | null = null;
-    private tail: ListNode<T> | null = null;
+    #head: ListNode<T> | null = null;
+    #tail: ListNode<T> | null = null;
     
     //     head         tail
     //        ↓         ↓
@@ -49,7 +49,7 @@ export class LinkedList<T> implements List<T> {
     // null ← 1 ←→ 2 ←→ 3 ←→ 4 ←→ null
 
     [Symbol.iterator]() {
-      let tmp = this.head;
+      let tmp = this.#head;
       type R = {
         done: boolean,
         value: T,
@@ -75,16 +75,16 @@ export class LinkedList<T> implements List<T> {
     public push(value: T): void {
         const newNode: ListNode<T> = {
             value: value,
-            prev: this.tail,
+            prev: this.#tail,
             next: null,
         };
         
-        if (!this.head || !this.tail) {
-            this.head = newNode;
-            this.tail = newNode;
+        if (!this.#head || !this.#tail) {
+            this.#head = newNode;
+            this.#tail = newNode;
         } else {
-            this.tail.next = newNode;
-            this.tail = newNode;
+            this.#tail.next = newNode;
+            this.#tail = newNode;
         }
     }
     
@@ -92,21 +92,21 @@ export class LinkedList<T> implements List<T> {
         const newNode: ListNode<T> = {
             value: value,
             prev: null,
-            next: this.head,
+            next: this.#head,
         };
         
-        if (!this.head || !this.tail) {
-            this.head = newNode;
-            this.tail = newNode;
+        if (!this.#head || !this.#tail) {
+            this.#head = newNode;
+            this.#tail = newNode;
         } else {
-            this.head.prev = newNode;
-            this.head = newNode;
+            this.#head.prev = newNode;
+            this.#head = newNode;
         }
     }
     
     public map<K>(cb: (value: T) => K): List<K> {
         const result = new LinkedList<K>();
-        let current = this.head;
+        let current = this.#head;
         while(current) {
             const newValue = cb(current.value);
             result.push(newValue);
@@ -117,7 +117,7 @@ export class LinkedList<T> implements List<T> {
     
     public find(cb: (value: T) => boolean): T | undefined {
         let result: T | undefined = undefined;
-        let current = this.head;
+        let current = this.#head;
         while(current) {
             if (cb(current.value)) {
                 result = current.value;
@@ -130,7 +130,7 @@ export class LinkedList<T> implements List<T> {
 
     public filter(cb: (value: T) => boolean): List<T> {
         const result = new LinkedList<T>();
-        let current = this.head;
+        let current = this.#head;
         while(current) {
             if (cb(current.value)) {
                 result.push(current.value);
@@ -141,7 +141,7 @@ export class LinkedList<T> implements List<T> {
     }
 
     public every(cb: (value: T) => boolean): boolean {
-        let current = this.head;
+        let current = this.#head;
         while(current) {
             if (!cb(current.value)) {
                 return false;
@@ -152,7 +152,7 @@ export class LinkedList<T> implements List<T> {
     }
 
     public some(cb: (value: T) => boolean): boolean {
-        let current = this.head;
+        let current = this.#head;
         while(current) {
             if (cb(current.value)) {
                 return true;
@@ -163,7 +163,7 @@ export class LinkedList<T> implements List<T> {
     }
 
     public includes(value: T): boolean {
-        let current = this.head;
+        let current = this.#head;
         while(current) {
             if (current.value === value) {
                 return true;
@@ -206,4 +206,4 @@ const l2: List<string> = new LinkedList<string>();
 //   curr = curr.prev;
 // }
 
-console.log('Hello, World!');
+// console.log('Hello, World!');
