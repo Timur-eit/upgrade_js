@@ -1,8 +1,13 @@
-export interface List<T> extends Iterable<T> {      
+type ListNode<T> = {
+  value: T;
+  prev: ListNode<T> | null;
+  next: ListNode<T> | null;
+}
+export interface List<T> extends Iterable<T> {
     push(value: T): void;
     unshift(value: T): void;
     map<K>(cb: (value: T) => K): List<K>;
-    find(cb: (value: T) => boolean): T | undefined;    
+    find(cb: (value: T) => boolean): T | undefined;
     /*
     reduce
     reduceRight
@@ -14,7 +19,7 @@ export interface List<T> extends Iterable<T> {
     sort
     pop
     unshift
-    indexOf 
+    indexOf
     foreach
     slice
     splice
@@ -30,46 +35,40 @@ const l1: List<string> = ["foobar", "baz", "qwerty"];
 // l1.push("qqqqq");
 // console.log(l1.map(x => x.length));
 
-type ListNode<T> = {
-  value: T;
-  prev: ListNode<T> | null;
-  next: ListNode<T> | null;
+interface ListIterator<T> extends Iterator<T> {
+    current: ListNode<T> | null;
+    next: (...args: [] | [undefined]) => IteratorResult<T, undefined>;
 }
+
 
 export class LinkedList<T> implements List<T> {
     #head: ListNode<T> | null = null;
     #tail: ListNode<T> | null = null;
-    
+
     //     head         tail
     //        ↓         ↓
     // null ← 1 ←→ 2 ←→ 3 ←→ null
-    
+
     //     head              tail
     //        ↓              ↓
     // null ← 1 ←→ 2 ←→ 3 ←→ 4 ←→ null
 
-    [Symbol.iterator]() {
-      let tmp = this.#head;
-      type R = {
-        done: boolean,
-        value: T,
-      }
-      return {
-        next() {
-          if (tmp === null) {
-            return {
-              done: true,
-            } as R;
-          }
-          const { value, next } = tmp;
-          tmp = next;
 
-          return {
-            done: false,
-            value: value,
-          };
+
+    [Symbol.iterator](): ListIterator<T> {
+        const listIterator: ListIterator<T> = {
+            current: this.#head,
+            next() {
+                if (this.current !== null) {
+                    const { value, next } = this.current;
+                    this.current = next;
+                    return { done: false, value: value };
+                } else {
+                    return { done: true, value: undefined };
+                }
+            }
         }
-      }
+        return listIterator;
     }
 
     public push(value: T): void {
@@ -78,7 +77,7 @@ export class LinkedList<T> implements List<T> {
             prev: this.#tail,
             next: null,
         };
-        
+
         if (!this.#head || !this.#tail) {
             this.#head = newNode;
             this.#tail = newNode;
@@ -87,14 +86,14 @@ export class LinkedList<T> implements List<T> {
             this.#tail = newNode;
         }
     }
-    
+
     public unshift(value: T): void {
         const newNode: ListNode<T> = {
             value: value,
             prev: null,
             next: this.#head,
         };
-        
+
         if (!this.#head || !this.#tail) {
             this.#head = newNode;
             this.#tail = newNode;
@@ -103,7 +102,7 @@ export class LinkedList<T> implements List<T> {
             this.#head = newNode;
         }
     }
-    
+
     public map<K>(cb: (value: T) => K): List<K> {
         const result = new LinkedList<K>();
         let current = this.#head;
@@ -114,7 +113,7 @@ export class LinkedList<T> implements List<T> {
         }
         return result;
     }
-    
+
     public find(cb: (value: T) => boolean): T | undefined {
         let result: T | undefined = undefined;
         let current = this.#head;
@@ -172,20 +171,24 @@ export class LinkedList<T> implements List<T> {
         }
         return false;
     };
-  
+
 }
 
 const l2: List<string> = new LinkedList<string>();
 
-// const l2Iterable = Array.from(l2);
-// console.log(l2Iterable);
+l2.push("1");
+l2.push("2");
+l2.push("3");
+l2.push("4");
+const l2Iterable = Array.from(l2);
+console.log(l2Iterable);
+
+for (const item of l2Iterable) {
+    console.log(item);
+}
 
 // console.log('new list', l2);
 
-// l2.push("1");
-// l2.push("2");
-// l2.push("3");
-// l2.push("4");
 
 // console.log(Array.from(l2));
 // console.log(l2);
