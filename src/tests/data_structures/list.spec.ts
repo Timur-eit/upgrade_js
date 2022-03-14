@@ -6,7 +6,7 @@ describe('LinkedList', () => {
     const data2 = 'qwe';
     const data3 = 'zxc';
 
-    test('method push should place new data in the end (tail) of list', () => {
+    test('method `push` should place new data in the end (tail) of list', () => {
 
         const list: List<string> = new LinkedList<string>();
 
@@ -18,7 +18,7 @@ describe('LinkedList', () => {
         expect<string[]>(listIterable).toEqual<string[]>([data1, data2, data3]);
     });
 
-    test('method unshift should place new data in the begining (head) of list', () => {
+    test('method `unshift` should place new data in the begining (head) of list', () => {
         const list: List<string> = new LinkedList<string>();
 
         list.unshift(data1);
@@ -29,7 +29,7 @@ describe('LinkedList', () => {
         expect<string[]>(listIterable).toEqual<string[]>([data3, data2, data1]);
     });
 
-    test('method map should return new list with modiied each list item', () => {
+    test('method `map` should return new list with modified each list item', () => {
 
         const list: List<number> = new LinkedList<number>();
 
@@ -43,7 +43,7 @@ describe('LinkedList', () => {
         expect<number[]>(newListIterabale).toEqual<number[]>([10, 20, 30]);
     });
 
-    test('method find should return data value in case it was found or underfined', () => {
+    test('method `find` should return data value in case it was found or underfined', () => {
 
         const list: List<string> = new LinkedList<string>();
 
@@ -58,7 +58,7 @@ describe('LinkedList', () => {
         expect<string | undefined>(notFoundData1).toBe<undefined>(undefined);
     });
 
-    test('method filter should return new list with items which are consited with callback condition', () => {
+    test('method `filter` should return new list with items which are consited with callback condition', () => {
 
         const dataColl = ['Hello1', data1, data2, 'Hello2', data3, 'Hello3'];
         const list: List<string> = new LinkedList<string>();
@@ -72,7 +72,7 @@ describe('LinkedList', () => {
         expect<string[]>(filtereListIterable).toEqual<string[]>(['Hello1', 'Hello2', 'Hello3']);
     });
 
-    test('method every returns true in case all list item are consited with callback condition on other case returns false', () => {
+    test('method `every` returns true in case all list item are consited with callback condition on other case returns false', () => {
 
         const dataColl = [2, 4, 6, 6, 10, 12];
         const list: List<number> = new LinkedList<number>();
@@ -87,7 +87,7 @@ describe('LinkedList', () => {
         expect<boolean>(list.every((item) => item === 2)).toBeFalsy();
     });
 
-    test('method some returns true in case some item of list is consited with callback condition on other case returns false', () => {
+    test('method `some` returns true in case some item of list is consited with callback condition on other case returns false', () => {
 
         const dataColl1 = [1, 3, 7, 9, 10, 1]; // true
         const list: List<number> = new LinkedList<number>();
@@ -102,7 +102,7 @@ describe('LinkedList', () => {
         expect<boolean>(list.some((item) => item === NaN)).toBeFalsy();
     });
 
-    test('method includes returns true in case value in callback parameter is in list', () => {
+    test('method `includes` returns true in case value in callback parameter is in list', () => {
 
         const dataColl = ['hello', 'morning', 'good', 'one'];
 
@@ -114,5 +114,45 @@ describe('LinkedList', () => {
 
         expect<boolean>(list.includes('morning')).toBeTruthy();
         expect<boolean>(list.includes('qwerty')).toBeFalsy();
+    });
+
+    test('method `pop` deletes the last item of the list and returns it in case the list is empty method returns `underfined`', () => {
+
+        const list: List<number> = new LinkedList<number>();
+
+        list.push(1);
+        list.push(2);
+        list.push(3);
+
+        const popped1 = list.pop();
+
+        expect(popped1).toBe(3);
+        expect(Array.from(list).length).toBe(2);
+        expect(Array.from(list)[1]).toBe(2);
+
+        const popped2 = list.pop();
+
+        expect(popped2).toBe(2);
+        expect(Array.from(list).length).toBe(1);
+        expect(Array.from(list)[0]).toBe(1);
+
+        const popped3 = list.pop();
+
+        expect(popped3).toBe(1);
+        expect(Array.from(list).length).toBe(0);
+        expect(Array.from(list)[0]).toBe(undefined);
+
+        const popped4 = list.pop();
+
+        expect(popped4).toBe(undefined);
+        expect(Array.from(list).length).toBe(0);
+        expect(Array.from(list)[0]).toBe(undefined);
+
+        const list2: List<number> = new LinkedList<number>();
+        const popped = list2.pop();
+
+        expect(popped).toBe(undefined);
+        expect(Array.from(list).length).toBe(0);
+
     });
 });
