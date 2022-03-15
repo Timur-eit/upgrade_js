@@ -17,7 +17,7 @@ export interface List<T> extends Iterable<T> {
     // includes
     reverse
     sort
-    pop
+    // pop
     // unshift
     indexOf
     foreach
@@ -29,6 +29,7 @@ export interface List<T> extends Iterable<T> {
    some(cb: (value: T) => boolean): boolean;
    includes(value: T): boolean;
    pop(): T | undefined;
+   indexOf(value: T): number;
 }
 
 const l1: List<string> = ["foobar", "baz", "qwerty"];
@@ -190,6 +191,20 @@ export class LinkedList<T> implements List<T> {
             return undefined;
         }
     }
+
+    public indexOf(value: T): number {
+        let index = 0;
+        let current = this.#head;
+
+        while(current) {
+            if (value === current.value) {
+                return index;
+            }
+            index += 1;
+            current = current.next;
+        }
+        return -1;
+    }
 }
 
 const l2: List<string> = new LinkedList<string>();
@@ -202,7 +217,7 @@ l2.push("4");
 // console.log(l2Iterable);
 
 // for (const item of l2) {
-//     console.log(item);
+    // console.log(item);
 // }
 
 // console.log('new list', l2);

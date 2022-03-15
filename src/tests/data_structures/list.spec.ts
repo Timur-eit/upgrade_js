@@ -153,6 +153,22 @@ describe('LinkedList', () => {
 
         expect(popped).toBe(undefined);
         expect(Array.from(list).length).toBe(0);
-
     });
+
+    test('method `indexOf` return the first index of searched value in case such value was not found it should return -1', () => {
+
+        const list: List<string> = new LinkedList<string>();
+
+        list.push('Bob');
+        list.push('John');
+        list.push('Mike');
+        list.push('Sandy');
+
+        expect<number>(list.indexOf('Bob')).toBe(0);
+        expect<number>(list.indexOf('John')).toBe(1);
+        expect<number>(list.indexOf('Mike')).toBe(2);
+        expect<number>(list.indexOf('Sandy')).toBe(3);
+        expect<number>(list.indexOf('Marla')).toBe(-1);
+    });
+
 });
