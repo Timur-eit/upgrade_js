@@ -171,4 +171,19 @@ describe('LinkedList', () => {
         expect<number>(list.indexOf('Marla')).toBe(-1);
     });
 
+    test('method reduce ...', () => {
+        const sl = new LinkedList<number>();
+
+        sl.push(1);
+        sl.push(2);
+        sl.push(3);
+
+        const reducedNumber = sl.reduce((prev, curr, i) => {
+            return prev + curr + i;
+        }, 0);
+
+        expect<number>(reducedNumber).toBe(9);
+        
+    });
+
 });
