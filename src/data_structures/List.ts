@@ -9,7 +9,7 @@ export interface List<T> extends Iterable<T> {
     map<K>(cb: (value: T) => K): List<K>;
     find(cb: (value: T) => boolean): T | undefined;
     /*
-    reduce
+    // reduce
     reduceRight
     // filter
     // every
@@ -19,7 +19,7 @@ export interface List<T> extends Iterable<T> {
     sort
     // pop
     // unshift
-    indexOf
+    // indexOf
     foreach
     slice
     splice
@@ -30,17 +30,30 @@ export interface List<T> extends Iterable<T> {
    includes(value: T): boolean;
    pop(): T | undefined;
    indexOf(value: T): number;
+   reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
+//    foreach(cb: (value: T) => void): void;
 }
+
 
 const l1: List<string> = ["foobar", "baz", "qwerty"];
 
 // l1.push("qqqqq");
 // console.log(l1.map(x => x.length));
 
-interface ListIterator<T> extends Iterator<T> {
-    current: ListNode<T> | null;
-    next: (...args: [] | [undefined]) => IteratorResult<T, undefined>;
-}
+// interface ListIterator<T> extends Iterator<T> {
+//     current: ListNode<T> | null;
+//     next: (...args: [] | [undefined]) => IteratorResult<T, undefined>;
+// }
+
+// interface Iterator<T, TReturn = any, TNext = undefined> {
+//     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
+//     next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+//     return?(value?: TReturn): IteratorResult<T, TReturn>;
+//     throw?(e?: any): IteratorResult<T, TReturn>;
+// }
+
+
+
 
 
 export class LinkedList<T> implements List<T> {
@@ -55,23 +68,43 @@ export class LinkedList<T> implements List<T> {
     //        ↓              ↓
     // null ← 1 ←→ 2 ←→ 3 ←→ 4 ←→ null
 
-
-
-    [Symbol.iterator](): ListIterator<T> {
-        const listIterator: ListIterator<T> = {
-            current: this.#head,
-            next() {
-                if (this.current !== null) {
-                    const { value, next } = this.current;
-                    this.current = next;
-                    return { done: false, value: value };
-                } else {
-                    return { done: true, value: undefined };
-                }
+    [Symbol.iterator]() {
+        let tmp = this.#head;
+        const iter: Iterator<T> = {
+          next() {
+            if (tmp === null) {
+              return {
+                done: true,
+                value: undefined,
+              };
             }
+            const { value, next } = tmp;
+            tmp = next;
+            return {
+              done: false,
+              value: value,
+            };
+          }
         }
-        return listIterator;
-    }
+
+        return iter;
+      }
+
+    // [Symbol.iterator](): ListIterator<T> {
+    //     const listIterator: ListIterator<T> = {
+    //         current: this.#head,
+    //         next() {
+    //             if (this.current !== null) {
+    //                 const { value, next } = this.current;
+    //                 this.current = next;
+    //                 return { done: false, value: value };
+    //             } else {
+    //                 return { done: true, value: undefined };
+    //             }
+    //         }
+    //     }
+    //     return listIterator;
+    // }
 
     public push(value: T): void {
         const newNode: ListNode<T> = {
@@ -175,36 +208,71 @@ export class LinkedList<T> implements List<T> {
     };
 
     public pop(): T | undefined {
-        const current = this.#tail;
-        if (current) {
-            const prev = current.prev;            
-            if (prev) {
-                prev.next = null;
-            } else {
-                this.#head = prev;
-                this.#tail = prev;
-                return current.value;
-            }            
-            this.#tail = prev;
-            return current.value;
-        } else {
-            return undefined;
+        // const current = this.#tail;
+        // if (current) {
+        //     const prev = current.prev;
+        //     if (prev) {
+        //         prev.next = null;
+        //     } else {
+        //         this.#head = prev;
+        //         this.#tail = prev;
+        //         return current.value;
+        //     }
+        //     this.#tail = prev;
+        //     return current.value;
+        // } else {
+        //     return undefined;
+        // }
+
+        if (this.#tail === null) {
+            return;
         }
+        const { value } = this.#tail;
+
+        if (this.#tail.prev === null) {
+            this.#head = null;
+            this.#tail = null;
+
+            return value;
+        }
+
+        this.#tail = this.#tail.prev;
+        this.#tail.next = null;
+
+        return value;
     }
 
     public indexOf(value: T): number {
         let index = 0;
-        let current = this.#head;
-
-        while(current) {
+        for (let current = this.#head; current !== null; current = current.next) {
             if (value === current.value) {
                 return index;
             }
             index += 1;
-            current = current.next;
         }
         return -1;
     }
+
+    reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S {
+        // initialValue?: S
+        // if (acc === undefined) {
+        //     return;
+        // }
+
+        let acc = initialValue;
+
+        for (let current = this.#head, index = 0; current !== null; current = current.next, index++) {
+            acc = cb(acc, current.value, index, this);
+        }
+        return acc;
+
+        // ["a", "b", "c", "d"].reduce(console.log)
+        // acc        curr     index     list
+        // 'a'        'b'      1         ['a', 'b', 'c', 'd']
+        // undefined  'c'      2         ['a', 'b', 'c', 'd']
+        // undefined  'd'      3         ['a', 'b', 'c', 'd']
+    }
+
 }
 
 const l2: List<string> = new LinkedList<string>();
@@ -243,3 +311,16 @@ l2.push("4");
 // }
 
 // console.log('Hello, World!');
+
+
+
+const sl = new LinkedList<number>();
+
+sl.push(1);
+sl.push(2);
+sl.push(3);
+
+sl.reduce((acc, curr, i, arr) => {
+
+    return 0;
+}, 0);
