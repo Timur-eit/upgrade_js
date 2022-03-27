@@ -10,7 +10,7 @@ const range: Range = {
         interface RangeIterator extends Iterator<number> {
             current: number;
             last: number;
-            next: (...args: [] | [undefined]) => IteratorResult<number, any>; // так требует указ
+            next: (...args: [] | [undefined]) => IteratorResult<number, undefined>; // так требует указ
         }
 
         const rangeIterator: RangeIterator = {
