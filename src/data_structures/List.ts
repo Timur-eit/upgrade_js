@@ -34,28 +34,6 @@ export interface List<T> extends Iterable<T> {
 //    foreach(cb: (value: T) => void): void;
 }
 
-
-const l1: List<string> = ["foobar", "baz", "qwerty"];
-
-// l1.push("qqqqq");
-// console.log(l1.map(x => x.length));
-
-// interface ListIterator<T> extends Iterator<T> {
-//     current: ListNode<T> | null;
-//     next: (...args: [] | [undefined]) => IteratorResult<T, undefined>;
-// }
-
-// interface Iterator<T, TReturn = any, TNext = undefined> {
-//     // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
-//     next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
-//     return?(value?: TReturn): IteratorResult<T, TReturn>;
-//     throw?(e?: any): IteratorResult<T, TReturn>;
-// }
-
-
-
-
-
 export class LinkedList<T> implements List<T> {
     #head: ListNode<T> | null = null;
     #tail: ListNode<T> | null = null;
@@ -86,25 +64,9 @@ export class LinkedList<T> implements List<T> {
             };
           }
         }
-
         return iter;
-      }
+    }
 
-    // [Symbol.iterator](): ListIterator<T> {
-    //     const listIterator: ListIterator<T> = {
-    //         current: this.#head,
-    //         next() {
-    //             if (this.current !== null) {
-    //                 const { value, next } = this.current;
-    //                 this.current = next;
-    //                 return { done: false, value: value };
-    //             } else {
-    //                 return { done: true, value: undefined };
-    //             }
-    //         }
-    //     }
-    //     return listIterator;
-    // }
 
     public push(value: T): void {
         const newNode: ListNode<T> = {
@@ -208,24 +170,8 @@ export class LinkedList<T> implements List<T> {
     };
 
     public pop(): T | undefined {
-        // const current = this.#tail;
-        // if (current) {
-        //     const prev = current.prev;
-        //     if (prev) {
-        //         prev.next = null;
-        //     } else {
-        //         this.#head = prev;
-        //         this.#tail = prev;
-        //         return current.value;
-        //     }
-        //     this.#tail = prev;
-        //     return current.value;
-        // } else {
-        //     return undefined;
-        // }
-
         if (this.#tail === null) {
-            return;
+            return; // underfined
         }
         const { value } = this.#tail;
 
