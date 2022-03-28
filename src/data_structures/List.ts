@@ -24,14 +24,17 @@ export interface List<T> extends Iterable<T> {
     slice
     splice
     */
-   filter(cb: (value: T) => boolean): List<T>;
-   every(cb: (value: T) => boolean): boolean;
-   some(cb: (value: T) => boolean): boolean;
-   includes(value: T): boolean;
-   pop(): T | undefined;
-   indexOf(value: T): number;
-   reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
-//    foreach(cb: (value: T) => void): void;
+    filter(cb: (value: T) => boolean): List<T>;
+    every(cb: (value: T) => boolean): boolean;
+    some(cb: (value: T) => boolean): boolean;
+    includes(value: T): boolean;
+    pop(): T | undefined;
+    indexOf(value: T): number;
+    
+    reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue?: S): S;
+    reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+    
+    // foreach(cb: (value: T) => void): void;
 }
 
 export class LinkedList<T> implements List<T> {
@@ -198,20 +201,32 @@ export class LinkedList<T> implements List<T> {
         }
         return -1;
     }
+    
 
-    reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S {
-        // initialValue?: S
-        // if (acc === undefined) {
-        //     return;
-        // }
+    reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
+    reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+    reduce<S>(cb: (previousValue: S | T, currentValue: T, index: number, list: this) => S | T, initialValue?: S) {        
+        // ? типы указываются два раза ?
 
-        let acc = initialValue;
-
-        for (let current = this.#head, index = 0; current !== null; current = current.next, index++) {
-            acc = cb(acc, current.value, index, this);
+        if (initialValue !== undefined) {
+            let acc = initialValue;
+            for (let current = this.#head, index = 0; current !== null; current = current.next, index++) {
+                acc = cb(acc, current.value, index, this) as S; // ?
+            }    
+            return acc;
         }
-        return acc;
-
+        
+        if (!initialValue && this.#head) {
+            let acc = this.#head.value;
+            for (let current = this.#head.next, index = 1; current !== null; current = current.next, index++) {
+                acc = cb(acc, current.value, index, this) as T; // ?
+            }    
+            return acc;
+        }
+        
+        if (!initialValue && !this.#head) {
+            throw new TypeError('Reduce of empty list with no initial value');
+        }
         // ["a", "b", "c", "d"].reduce(console.log)
         // acc        curr     index     list
         // 'a'        'b'      1         ['a', 'b', 'c', 'd']
@@ -270,3 +285,6 @@ sl.reduce((acc, curr, i, arr) => {
 
     return 0;
 }, 0);
+
+const arr = [0, 1, 2];
+arr.reduce((prev, curr) => prev + curr, 0);

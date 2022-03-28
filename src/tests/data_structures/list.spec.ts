@@ -171,7 +171,7 @@ describe('LinkedList', () => {
         expect<number>(list.indexOf('Marla')).toBe(-1);
     });
 
-    test('method reduce ...', () => {
+    test('method reduce returns sum of all numbers from list and initial value in case initial value was passed', () => {
         const sl = new LinkedList<number>();
 
         sl.push(1);
@@ -180,10 +180,36 @@ describe('LinkedList', () => {
 
         const reducedNumber = sl.reduce((prev, curr, i) => {
             return prev + curr + i;
-        }, 0);
+        }, 1);
+
+        const reducedNumber2 = sl.reduce((prev, curr, i) => {
+            return prev + curr + i;
+        });
+
+        expect<number>(reducedNumber).toBe(10);
+        expect<number>(reducedNumber2).toBe(9);
+    });
+    
+    test('method reduce returns sum of all numbers from list without initial value in case initial value was not passed', () => {
+        const sl = new LinkedList<number>();
+
+        sl.push(1);
+        sl.push(2);
+        sl.push(3);
+
+        const reducedNumber = sl.reduce((prev, curr, i) => {
+            return prev + curr + i;
+        });
 
         expect<number>(reducedNumber).toBe(9);
         
     });
+
+    test('method reduce throw a TypeError in case list is empty and there is no initial value', () => {
+        const emptyList = new LinkedList<number>();
+        try {
+            expect(emptyList.reduce((prev, curr) => prev + curr)).toThrowError('Reduce of empty list with no initial value');
+        } catch {}
+    })
 
 });
