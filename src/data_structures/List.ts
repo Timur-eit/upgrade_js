@@ -30,10 +30,10 @@ export interface List<T> extends Iterable<T> {
     includes(value: T): boolean;
     pop(): T | undefined;
     indexOf(value: T): number;
-    
+
     reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue?: S): S;
     reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
-    
+
     // foreach(cb: (value: T) => void): void;
 }
 
@@ -140,15 +140,41 @@ export class LinkedList<T> implements List<T> {
     }
 
     public every(cb: (value: T) => boolean): boolean {
-        let current = this.#head;
-        while(current) {
-            if (!cb(current.value)) {
-                return false;
-            }
-            current = current.next;
-        }
-        return true;
+        // let current = this.#head;
+        // while(current) {
+        //     if (!cb(current.value)) {
+        //         return false;
+        //     }
+        //     current = current.next;
+        // }
+        // return true;
+
+
+        // return this.reduce<boolean>((prev, curr) => cb(curr) && prev, true);
+        return this.reduce<boolean>((prev, curr) => prev && cb(curr), true);
     }
+
+    // f = foldl (\x y -> 2*x + y) 4
+    // f [1,2,3]
+    // f [1,2,5]
+    // [1,2,3].reduce((x, y) => 2*x + y, 4)
+
+    // ["1","2","3"].join(" ")
+    // " ".join(["1", "2", "3"])
+
+    //             js                                java
+
+    // const arr = new Int32Array(10);      int[] arr = new int[10];
+
+    // const list = [];                     List<Integer> = new ArrayList<Integer>();
+
+
+
+    // intercalate " " ["is","there","such","a","function","?"]
+
+
+
+    // 43
 
     public some(cb: (value: T) => boolean): boolean {
         let current = this.#head;
@@ -201,32 +227,28 @@ export class LinkedList<T> implements List<T> {
         }
         return -1;
     }
-    
+
 
     reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
     reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
-    reduce<S>(cb: (previousValue: S | T, currentValue: T, index: number, list: this) => S | T, initialValue?: S) {        
-        // ? типы указываются два раза ?
-
+    reduce<S, X extends S | T>(cb: (previousValue: X, currentValue: T, index: number, list: this) => X, initialValue?: S) {
+        
         if (initialValue !== undefined) {
-            let acc = initialValue;
+            let acc = initialValue as X;
             for (let current = this.#head, index = 0; current !== null; current = current.next, index++) {
-                acc = cb(acc, current.value, index, this) as S; // ?
-            }    
+                acc = cb(acc, current.value, index, this);
+            }
             return acc;
         }
-        
-        if (!initialValue && this.#head) {
-            let acc = this.#head.value;
-            for (let current = this.#head.next, index = 1; current !== null; current = current.next, index++) {
-                acc = cb(acc, current.value, index, this) as T; // ?
-            }    
-            return acc;
-        }
-        
-        if (!initialValue && !this.#head) {
+        if (this.#head === null) {
             throw new TypeError('Reduce of empty list with no initial value');
         }
+
+        let acc = this.#head.value as X;
+        for (let current = this.#head.next, index = 1; current !== null; current = current.next, index++) {
+            acc = cb(acc, current.value, index, this); // ?
+        }
+        return acc;
         // ["a", "b", "c", "d"].reduce(console.log)
         // acc        curr     index     list
         // 'a'        'b'      1         ['a', 'b', 'c', 'd']
