@@ -140,17 +140,6 @@ export class LinkedList<T> implements List<T> {
     }
 
     public every(cb: (value: T) => boolean): boolean {
-        // let current = this.#head;
-        // while(current) {
-        //     if (!cb(current.value)) {
-        //         return false;
-        //     }
-        //     current = current.next;
-        // }
-        // return true;
-
-
-        // return this.reduce<boolean>((prev, curr) => cb(curr) && prev, true);
         return this.reduce<boolean>((prev, curr) => prev && cb(curr), true);
     }
 
@@ -168,11 +157,7 @@ export class LinkedList<T> implements List<T> {
 
     // const list = [];                     List<Integer> = new ArrayList<Integer>();
 
-
-
     // intercalate " " ["is","there","such","a","function","?"]
-
-
 
     // 43
 
