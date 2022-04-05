@@ -207,9 +207,8 @@ describe('LinkedList', () => {
 
     test('method reduce throw a TypeError in case list is empty and there is no initial value', () => {
         const emptyList = new LinkedList<number>();
-        try {
-            expect(emptyList.reduce((prev, curr) => prev + curr)).toThrowError('Reduce of empty list with no initial value');
-        } catch {}
+
+        expect(() => emptyList.reduce((prev, curr) => prev + curr)).toThrowError('Reduce of empty list with no initial value');
     })
 
 });
