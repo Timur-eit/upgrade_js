@@ -21,7 +21,7 @@ export interface List<T> extends Iterable<T> {
     // unshift
     // indexOf
     foreach
-    slice
+    // slice
     splice
     */
     filter(cb: (value: T) => boolean): List<T>;
@@ -30,9 +30,9 @@ export interface List<T> extends Iterable<T> {
     includes(value: T): boolean;
     pop(): T | undefined;
     indexOf(value: T): number;
-
     reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue?: S): S;
     reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+    slice(begin?: number, end?: number): List<T>;
 
     // foreach(cb: (value: T) => void): void;
 }
@@ -214,10 +214,10 @@ export class LinkedList<T> implements List<T> {
     }
 
 
-    reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
-    reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
-    reduce<S, X extends S | T>(cb: (previousValue: X, currentValue: T, index: number, list: this) => X, initialValue?: S) {
-        
+    public reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
+    public reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+    public reduce<S, X extends S | T>(cb: (previousValue: X, currentValue: T, index: number, list: this) => X, initialValue?: S) {
+
         if (initialValue !== undefined) {
             let acc = initialValue as X;
             for (let current = this.#head, index = 0; current !== null; current = current.next, index++) {
@@ -241,19 +241,76 @@ export class LinkedList<T> implements List<T> {
         // undefined  'd'      3         ['a', 'b', 'c', 'd']
     }
 
+    public slice(begin?: number, end?: number): List<T> {
+        
+        const newList = new LinkedList<T>();
+        
+        
+        // если list пуст
+        // if (!this.#head) {
+        //     return new LinkedList<T>();
+        // }
+
+        // if (begin && begin > 0 && !end) {
+        //     return this.reduce<List<T>>((prev, curr, i) => {
+        //         if (begin !== i) {
+        //             prev.push(curr);
+        //         }
+        //         return prev;
+        //     }, new LinkedList<T>());
+        // }
+
+        if (begin && begin < 0 && !end) {
+            // return this.reduce<List<T>>((prev, curr, i) => {
+            //     if (begin !== i) {
+            //         prev.push(curr);
+            //     }
+            //     return prev;
+            // }, new LinkedList<T>());
+            
+            for (let current = this.#tail, index = 0; current !== null; current = current.prev, index--) {
+                // acc = cb(acc, current.value, index, this);
+                if (index > begin) {
+                    newList.unshift(current.value);
+                }
+                // console.log('current', index, current);
+            }
+
+            // let current = this.#tail;
+            // while(current) {
+            //     console.log('current', current);
+            //     current = current.prev;
+            // }
+
+            // return new LinkedList<T>();
+        }
+
+
+        // return this.reduce<List<T>>((prev, curr) => {
+        //     prev.push(curr);
+        //     return prev;
+        // }, new LinkedList<T>());
+
+        console.log('list', Array.from(newList));
+        return newList;
+
+
+
+    }
+
 }
 
-const l2: List<string> = new LinkedList<string>();
+// const l2: List<string> = new LinkedList<string>();
 
-l2.push("1");
-l2.push("2");
-l2.push("3");
-l2.push("4");
+// l2.push("1");
+// l2.push("2");
+// l2.push("3");
+// l2.push("4");
 // const l2Iterable = Array.from(l2);
-// console.log(l2Iterable);
+// console.log(l2);
 
 // for (const item of l2) {
-    // console.log(item);
+//     console.log(item);
 // }
 
 // console.log('new list', l2);

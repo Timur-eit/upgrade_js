@@ -189,7 +189,7 @@ describe('LinkedList', () => {
         expect<number>(reducedNumber).toBe(10);
         expect<number>(reducedNumber2).toBe(9);
     });
-    
+
     test('method reduce returns sum of all numbers from list without initial value in case initial value was not passed', () => {
         const sl = new LinkedList<number>();
 
@@ -202,7 +202,7 @@ describe('LinkedList', () => {
         });
 
         expect<number>(reducedNumber).toBe(9);
-        
+
     });
 
     test('method reduce throw a TypeError in case list is empty and there is no initial value', () => {
@@ -210,5 +210,26 @@ describe('LinkedList', () => {
 
         expect(() => emptyList.reduce((prev, curr) => prev + curr)).toThrowError('Reduce of empty list with no initial value');
     })
+
+    test('the slice() returns a copy of a portion of a list selected from start to end (end not included) where start and end represent the index of items in that list', () => {
+
+        const animals = ['ant', 'bison', 'camel', 'duck', 'elephant']; // 5
+        const animalsList = new LinkedList<string>();
+        animals.forEach((item) => {
+            animalsList.push(item);
+        });
+
+        // expect(Array.from(new LinkedList())).toEqual([]);
+        // expect<string[]>(Array.from(animalsList.slice())).toEqual<string[]>(animals);
+        // expect<string[]>(Array.from(animalsList.slice(0))).toEqual<string[]>(animals);
+        
+        // expect<number>(Array.from(animalsList.slice(1)).length).toBe<number>(4);
+        
+       
+        expect<string[]>(Array.from(animalsList.slice(-1))).toEqual<string[]>(['elephant']);
+        expect<string[]>(Array.from(animalsList.slice(-2))).toEqual<string[]>(['duck', 'elephant']);
+        expect<string[]>(Array.from(animalsList.slice(-3))).toEqual<string[]>(['camel', 'duck', 'elephant']);
+        // expect(Array.from(animalsList.slice(-2))).toEqual<string[]>([]);
+    });
 
 });
