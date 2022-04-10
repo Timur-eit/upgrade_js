@@ -10,7 +10,7 @@ export interface List<T> extends Iterable<T> {
     find(cb: (value: T) => boolean): T | undefined;
     /*
     // reduce
-    reduceRight
+    // reduceRight
     // filter
     // every
     // some
@@ -32,6 +32,12 @@ export interface List<T> extends Iterable<T> {
     indexOf(value: T): number;
     reduce<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue?: S): S;
     reduce(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+
+    reduceRight<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue?: S): S;
+    reduceRight(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+
+
+
     slice(begin?: number, end?: number): List<T>;
 
     // foreach(cb: (value: T) => void): void;
@@ -240,6 +246,34 @@ export class LinkedList<T> implements List<T> {
         // undefined  'c'      2         ['a', 'b', 'c', 'd']
         // undefined  'd'      3         ['a', 'b', 'c', 'd']
     }
+    
+    public reduceRight<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
+    public reduceRight(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
+    public reduceRight<S, X extends S | T>(cb: (previousValue: X, currentValue: T, index: number, list: this) => X, initialValue?: S) {
+        
+        if (this.#tail === null) {
+            throw new TypeError('Reduce of empty list with no initial value');
+        }
+
+        let listLength = 0;
+        for (let current = this.#head; current !== null; current = current.next) {
+            listLength++;
+        }
+
+        if (initialValue !== undefined) {
+            let acc = initialValue as X;
+            for (let current = this.#tail, index = listLength - 1; current !== null; current = current.prev as ListNode<T>, index--) {
+                acc = cb(acc, current.value, index, this);
+            }
+            return acc;
+        }        
+
+        let acc = this.#tail.value as X;
+        for (let current = this.#tail.prev, index = listLength - 2; current !== null; current = current.prev, index--) {
+            acc = cb(acc, current.value, index, this);
+        }
+        return acc;
+    }
 
     public slice(begin?: number, end?: number): List<T> {
         
@@ -291,7 +325,7 @@ export class LinkedList<T> implements List<T> {
         //     return prev;
         // }, new LinkedList<T>());
 
-        console.log('list', Array.from(newList));
+        // console.log('list', Array.from(newList));
         return newList;
 
 

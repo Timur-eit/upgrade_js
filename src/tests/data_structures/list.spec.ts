@@ -211,6 +211,33 @@ describe('LinkedList', () => {
         expect(() => emptyList.reduce((prev, curr) => prev + curr)).toThrowError('Reduce of empty list with no initial value');
     })
 
+
+    test('method reduceRight returns sum of all numbers from list (from right-to-left) and initial value in case initial value was passed', () => {
+        const sl = new LinkedList<string>();
+
+        sl.push('a');
+        sl.push('b');
+        sl.push('c');
+        sl.push('d');
+
+        let checkIndex1 = 0;
+        const reducedNumber1 = sl.reduceRight((prev, curr, i) => {
+            checkIndex1 += i;
+            return prev + curr;
+        }, 'e');
+
+        let checkIndex2 = 0;
+        const reducedNumber2 = sl.reduceRight((prev, curr, i) => {
+            checkIndex2 += i;
+            return prev + curr;
+        });
+
+        expect<string>(reducedNumber1).toBe<string>('edcba');
+        expect<number>(checkIndex1).toBe<number>(6);
+        expect<string>(reducedNumber2).toBe<string>('dcba');
+        expect<number>(checkIndex2).toBe<number>(3);
+    });
+
     test('the slice() returns a copy of a portion of a list selected from start to end (end not included) where start and end represent the index of items in that list', () => {
 
         const animals = ['ant', 'bison', 'camel', 'duck', 'elephant']; // 5
@@ -222,10 +249,10 @@ describe('LinkedList', () => {
         // expect(Array.from(new LinkedList())).toEqual([]);
         // expect<string[]>(Array.from(animalsList.slice())).toEqual<string[]>(animals);
         // expect<string[]>(Array.from(animalsList.slice(0))).toEqual<string[]>(animals);
-        
+
         // expect<number>(Array.from(animalsList.slice(1)).length).toBe<number>(4);
-        
-       
+
+
         expect<string[]>(Array.from(animalsList.slice(-1))).toEqual<string[]>(['elephant']);
         expect<string[]>(Array.from(animalsList.slice(-2))).toEqual<string[]>(['duck', 'elephant']);
         expect<string[]>(Array.from(animalsList.slice(-3))).toEqual<string[]>(['camel', 'duck', 'elephant']);
