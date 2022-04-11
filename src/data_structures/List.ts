@@ -246,11 +246,11 @@ export class LinkedList<T> implements List<T> {
         // undefined  'c'      2         ['a', 'b', 'c', 'd']
         // undefined  'd'      3         ['a', 'b', 'c', 'd']
     }
-    
+
     public reduceRight<S>(cb: (previousValue: S, currentValue: T, index: number, list: this) => S, initialValue: S): S;
     public reduceRight(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
     public reduceRight<S, X extends S | T>(cb: (previousValue: X, currentValue: T, index: number, list: this) => X, initialValue?: S) {
-        
+
         if (this.#tail === null) {
             throw new TypeError('Reduce of empty list with no initial value');
         }
@@ -266,7 +266,7 @@ export class LinkedList<T> implements List<T> {
                 acc = cb(acc, current.value, index, this);
             }
             return acc;
-        }        
+        }
 
         let acc = this.#tail.value as X;
         for (let current = this.#tail.prev, index = listLength - 2; current !== null; current = current.prev, index--) {
@@ -276,54 +276,59 @@ export class LinkedList<T> implements List<T> {
     }
 
     public slice(begin?: number, end?: number): List<T> {
-        
-        const newList = new LinkedList<T>();
-        
-        
-        // если list пуст
-        // if (!this.#head) {
-        //     return new LinkedList<T>();
-        // }
 
-        // if (begin && begin > 0 && !end) {
+        const newList = new LinkedList<T>();
+
+        if (!this.#head) {
+            return newList;
+        }
+
+        if (begin && begin >= 0 && !end) {
+            return this.reduceRight<List<T>>((prev, curr, i) => {
+                if (begin > i) {
+                    return prev;
+                }
+                if (i >= begin) {
+                    prev.unshift(curr);
+                }
+                return prev;
+            }, newList)
+        }
+
+        if (begin && begin < 0 && !end) {
+            let j = 0;
+            return this.reduceRight<List<T>>((prev, curr) => {
+                j -= 1;
+                if (j >= begin) {
+                    prev.unshift(curr);
+                }
+                return prev;
+            }, newList);
+        }
+
+        if (begin && begin > 0 && end && end > 0) {
+            return this.reduce<List<T>>((prev, curr, i) => {
+                if (i >= begin && i < end) {
+                    prev.push(curr);
+                }
+                return prev;
+            }, newList);
+        }
+        
+        // if (begin && begin > 0 && end && end < 0) {
         //     return this.reduce<List<T>>((prev, curr, i) => {
-        //         if (begin !== i) {
+        //         if (i >= begin && i < end) {
         //             prev.push(curr);
         //         }
         //         return prev;
-        //     }, new LinkedList<T>());
+        //     }, newList);
         // }
 
-        if (begin && begin < 0 && !end) {
-            // return this.reduce<List<T>>((prev, curr, i) => {
-            //     if (begin !== i) {
-            //         prev.push(curr);
-            //     }
-            //     return prev;
-            // }, new LinkedList<T>());
-            
-            for (let current = this.#tail, index = 0; current !== null; current = current.prev, index--) {
-                // acc = cb(acc, current.value, index, this);
-                if (index > begin) {
-                    newList.unshift(current.value);
-                }
-                // console.log('current', index, current);
-            }
 
-            // let current = this.#tail;
-            // while(current) {
-            //     console.log('current', current);
-            //     current = current.prev;
-            // }
-
-            // return new LinkedList<T>();
-        }
-
-
-        // return this.reduce<List<T>>((prev, curr) => {
-        //     prev.push(curr);
-        //     return prev;
-        // }, new LinkedList<T>());
+        return this.reduce<List<T>>((prev, curr) => {
+            prev.push(curr);
+            return prev;
+        }, newList);
 
         // console.log('list', Array.from(newList));
         return newList;

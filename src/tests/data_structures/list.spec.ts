@@ -245,18 +245,25 @@ describe('LinkedList', () => {
         animals.forEach((item) => {
             animalsList.push(item);
         });
-
-        // expect(Array.from(new LinkedList())).toEqual([]);
-        // expect<string[]>(Array.from(animalsList.slice())).toEqual<string[]>(animals);
-        // expect<string[]>(Array.from(animalsList.slice(0))).toEqual<string[]>(animals);
-
-        // expect<number>(Array.from(animalsList.slice(1)).length).toBe<number>(4);
+        
+        expect<string[]>(Array.from(animalsList.slice())).toEqual<string[]>(animals);        
+        expect<string[]>(Array.from(animalsList.slice(0))).toEqual<string[]>(animals);
+        expect<string[]>(Array.from(animalsList.slice(1))).toEqual<string[]>(['bison', 'camel', 'duck', 'elephant']);
+        expect<string[]>(Array.from(animalsList.slice(2))).toEqual<string[]>(['camel', 'duck', 'elephant']);
+        expect<string[]>(Array.from(animalsList.slice(3))).toEqual<string[]>(['duck', 'elephant']);
+        
+        expect<string[]>(Array.from(animalsList.slice(6))).toEqual<string[]>([]);
 
 
         expect<string[]>(Array.from(animalsList.slice(-1))).toEqual<string[]>(['elephant']);
         expect<string[]>(Array.from(animalsList.slice(-2))).toEqual<string[]>(['duck', 'elephant']);
         expect<string[]>(Array.from(animalsList.slice(-3))).toEqual<string[]>(['camel', 'duck', 'elephant']);
-        // expect(Array.from(animalsList.slice(-2))).toEqual<string[]>([]);
+        
+        expect<string[]>(Array.from(animalsList.slice(1, 5))).toEqual<string[]>(['bison', 'camel', 'duck', 'elephant']);
+        expect<string[]>(Array.from(animalsList.slice(1, 4))).toEqual<string[]>(['bison', 'camel', 'duck']);        
+        expect<string[]>(Array.from(animalsList.slice(2, 5))).toEqual<string[]>(['camel', 'duck', 'elephant']);
+        expect<string[]>(Array.from(animalsList.slice(2, 4))).toEqual<string[]>(['camel', 'duck']);
+        expect<string[]>(Array.from(animalsList.slice(2, 3))).toEqual<string[]>(['camel']);
     });
 
 });
