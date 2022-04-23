@@ -37,7 +37,7 @@ export interface List<T> extends Iterable<T> {
     reduceRight(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
 
 
-
+    sort(fn: (a: T, b: T) => number): void;
     slice(begin?: number, end?: number): List<T>;
 
     // foreach(cb: (value: T) => void): void;
@@ -75,6 +75,13 @@ export class LinkedList<T> implements List<T> {
         }
         return iter;
     }
+
+    
+    sort(fn: (a: T, b: T) => number = (a, b) => String(a).localeCompare(String(b))): this {
+        // merge sort      O(n×log₂n)
+        // selection sort  O(n²)
+        return this;
+    };
 
 
     public push(value: T): void {
