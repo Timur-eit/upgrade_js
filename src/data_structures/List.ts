@@ -46,6 +46,7 @@ export interface List<T> extends Iterable<T> {
 export class LinkedList<T> implements List<T> {
     #head: ListNode<T> | null = null;
     #tail: ListNode<T> | null = null;
+    public length: number = 0;
 
     //     head         tail
     //        ↓         ↓
@@ -98,6 +99,7 @@ export class LinkedList<T> implements List<T> {
             this.#tail.next = newNode;
             this.#tail = newNode;
         }
+        this.length += 1;
     }
 
     public unshift(value: T): void {
@@ -114,6 +116,7 @@ export class LinkedList<T> implements List<T> {
             this.#head.prev = newNode;
             this.#head = newNode;
         }
+        this.length += 1;
     }
 
     public map<K>(cb: (value: T) => K): List<K> {
@@ -200,6 +203,8 @@ export class LinkedList<T> implements List<T> {
         if (this.#tail === null) {
             return; // underfined
         }
+        this.length -= 1;
+        
         const { value } = this.#tail;
 
         if (this.#tail.prev === null) {

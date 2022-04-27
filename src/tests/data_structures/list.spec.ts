@@ -266,4 +266,33 @@ describe('LinkedList', () => {
         expect<string[]>(Array.from(animalsList.slice(2, 3))).toEqual<string[]>(['camel']);
     });
 
+    test('check length of list', () => {
+        const list = new LinkedList<string>();
+        
+        list.push('value1');    
+        expect<number>(list.length).toEqual<number>(1);
+        list.push('value2');
+        expect<number>(list.length).toEqual<number>(2);
+        list.push('value3');
+        expect<number>(list.length).toEqual<number>(3);
+        list.push('value4');
+        
+        list.unshift('value5');
+        expect<number>(list.length).toEqual<number>(5);
+        
+        list.pop();
+        expect<number>(list.length).toEqual<number>(4);
+        list.pop();
+        expect<number>(list.length).toEqual<number>(3);
+        list.pop();
+        expect<number>(list.length).toEqual<number>(2);
+        list.pop();
+        expect<number>(list.length).toEqual<number>(1);
+        
+        list.pop();
+        expect<number>(list.length).toEqual<number>(0);
+        list.pop();
+        expect<number>(list.length).toEqual<number>(0);
+    });
+
 });
