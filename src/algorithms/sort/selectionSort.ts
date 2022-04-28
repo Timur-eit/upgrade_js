@@ -23,20 +23,51 @@ function getSmallestIndex<T = string | number>(arr: T[]): number  {
     return smallestIndex;
 }
 
-function selectionSort<T = string | number>(arr: T[]): T[] {
-    const initialArr = [...arr];
-    const resultArr: T[] = [];
+function selectionSort<T>(
+    arr: T[],
+    comparator: (a: T, b: T)  => number = (a, b) => String(a).localeCompare(String(b))
+): T[] {
 
-    for (let i = 0; i < arr.length; i++) {
-        const smallestIndex = getSmallestIndex<T>(initialArr);
-        resultArr.push(initialArr[smallestIndex]);
-        initialArr.splice(smallestIndex, 1);
+    for (let k = 0; k < arr.length; k++) {
+        let smallestIndex = k;
+
+        for (let i = k + 1; i < arr.length; i++) {
+            if (comparator(arr[i], arr[smallestIndex]) < 0) {
+                smallestIndex = i;
+            }
+        }
+        const changedItem = arr[k];
+        arr[k] = arr[smallestIndex];
+        arr[smallestIndex] = changedItem;
     }
-    return resultArr;
+
+    return arr;
 }
 
-console.log(selectionSort(arr1));
-console.log(selectionSort(arr2));
-console.log(selectionSort(arr3));
-console.log(selectionSort(arr4));
-console.log(selectionSort(arr5));
+// console.log(selectionSort(arr1));
+// console.log(selectionSort(arr2));
+// console.log(selectionSort(arr3));
+// console.log(selectionSort(arr4));
+// console.log(selectionSort(arr5));
+
+var items = [
+    { name: 'Edward', value: 21 },
+    { name: 'Sharpe', value: 37 },
+    { name: 'And', value: 45 },
+    { name: 'The', value: -12 },
+    { name: 'Magnetic', value: 0 },
+    { name: 'Zeros', value: 37 }
+  ];
+
+  selectionSort(items, function (a, b) {
+    if (a.value > b.value) {
+      return 1;
+    }
+    if (a.value < b.value) {
+      return -1;
+    }
+    // a должно быть равным b
+    return 0;
+  });
+  
+  console.log(items);
