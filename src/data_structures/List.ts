@@ -37,7 +37,8 @@ export interface List<T> extends Iterable<T> {
     reduceRight(cb: (previousValue: T, currentValue: T, index: number, list: this) => T): T;
 
 
-    sort(fn: (a: T, b: T) => number): void;
+    sort(fn: (a: T, b: T) => number): this;
+    selectSort(): List<T>;
     slice(begin?: number, end?: number): List<T>;
 
     // foreach(cb: (value: T) => void): void;
@@ -83,6 +84,53 @@ export class LinkedList<T> implements List<T> {
         // selection sort  O(n²)
         return this;
     };
+
+    #getSmallestValue(): T | null {
+      if (!this.#head) {
+        return null;
+      }
+      let smallestValue = this.#head.value;
+      for (let current = this.#head; current !== null; current = current.next) {
+        if (current.value < smallestValue) {
+          smallestValue = current.value; 
+        }
+      }
+      return smallestValue;
+    }
+
+    selectSort(): List<T> {
+      
+      if (!this.#head) {
+        return this;  
+      }
+
+      
+      const newList = new LinkedList<T>();
+      
+                                                    //@ts-ignore
+      for (let current = this.#head; current !== null; current = current.next) {
+        newList.push(current.value);
+        // const smalletsValue = this.#getSmallestValue();
+        // newList.unshift(smalletsValue!); // TODO refact getSmallestValue
+        // if (current.next === null && current.prev) {
+        //   current.prev.next = null;
+          
+        // }
+        // if (current.prev === null && current.next) {
+        //   current.next.prev = null;
+        // } 
+       
+        // if (current.prev) { current.prev.next = current.next; }
+        // if (current.next) { current.next.prev = current.prev; }
+      }
+      for (let current = this.#head; current !== null; current = current.next) {
+        const smalletsValue = this.#getSmallestValue();
+      }
+
+
+
+      return newList;
+    }
 
 
     public push(value: T): void {

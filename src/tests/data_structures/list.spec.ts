@@ -295,4 +295,30 @@ describe('LinkedList', () => {
         expect<number>(list.length).toEqual<number>(0);
     });
 
+    test.skip('private method getSmallestValue returns the smalles value of the list in case list is empty returns null', () => {
+      const list = new LinkedList<number>();
+      list.push(100);
+      list.push(55);
+      list.push(1);
+      list.push(0);
+      
+      // expect<number>(list.getSmallestValue()).toEqual<number>(0);
+
+      const emptyList = new LinkedList<numer>();
+      // expect<number>(emptyList.getSmallestValue()).toBeNull();
+      
+    });
+
+  test('method selectSort() return sorted list', () => {
+    const list = new LinkedList<number>();
+    list.push(100);
+    list.push(55);
+    list.push(200);
+    list.push(10);
+    list.push(15);
+    list.push(1);
+
+    expect<number[]>(Array.from(list.selectSort())).toEqual<number[]>([1, 10, 15, 55, 100, 200]);
+  })
+
 });
