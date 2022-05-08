@@ -44,12 +44,6 @@ function selectionSort<T>(
     return arr;
 }
 
-// console.log(selectionSort(arr1));
-// console.log(selectionSort(arr2));
-// console.log(selectionSort(arr3));
-// console.log(selectionSort(arr4));
-// console.log(selectionSort(arr5));
-
 var items = [
     { name: 'Edward', value: 21 },
     { name: 'Sharpe', value: 37 },
@@ -70,4 +64,32 @@ var items = [
     return 0;
   });
   
-  console.log(items);
+console.log(items);  
+
+function numberComparator(a: number, b: number): number {
+  if (a > b) {
+      return 1
+  }
+  if (a < b) {
+      return -1;
+  }
+  return 0;
+}
+  
+selectionSort(arr1, numberComparator);
+console.log('arr1:', arr1);
+selectionSort(arr2, numberComparator);
+console.log('arr2:', arr2);
+
+function letterArrComparator(arr1: string[], arr2: string[]) {
+    return arr2[0].localeCompare(arr1[0]); // DESC
+}
+
+selectionSort(arr4, letterArrComparator);
+console.log('arr4:', arr4, '// DESC');
+
+selectionSort(arr3);
+console.log('arr3:', arr3);
+
+selectionSort(arr5);
+console.log('arr5:', arr5);
