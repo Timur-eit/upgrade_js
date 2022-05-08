@@ -11,18 +11,6 @@ const arr4 = [['Zack'], ['John'], ['Bob'], ['Ann']];
 const arr5 = [[6], [1], [9], [2]];
 
 
-function getSmallestIndex<T = string | number>(arr: T[]): number  {
-    let smallest = arr[0];
-    let smallestIndex = 0;
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i] < smallest) {
-            smallest = arr[i];
-            smallestIndex = i;
-        }
-    }
-    return smallestIndex;
-}
-
 function selectionSort<T>(
     arr: T[],
     comparator: (a: T, b: T)  => number = (a, b) => String(a).localeCompare(String(b))
