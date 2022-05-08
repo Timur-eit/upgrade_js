@@ -28,16 +28,16 @@ function selectionSort<T>(
     comparator: (a: T, b: T)  => number = (a, b) => String(a).localeCompare(String(b))
 ): T[] {
 
-    for (let k = 0; k < arr.length; k++) {
-        let smallestIndex = k;
+    for (let i = 0; i < arr.length; i++) {
+        let smallestIndex = i;
 
-        for (let i = k + 1; i < arr.length; i++) {
-            if (comparator(arr[i], arr[smallestIndex]) < 0) {
-                smallestIndex = i;
+        for (let k = i + 1; k < arr.length; k++) {
+            if (comparator(arr[k], arr[smallestIndex]) < 0) {
+                smallestIndex = k;
             }
         }
-        const changedItem = arr[k];
-        arr[k] = arr[smallestIndex];
+        const changedItem = arr[i];
+        arr[i] = arr[smallestIndex];
         arr[smallestIndex] = changedItem;
     }
 
