@@ -8,7 +8,8 @@ function quickSort<T>(
     arr: T[],
     left: number,
     right: number,
-    comparator: (a: T, b: T)  => number = (a, b) => String(a).localeCompare(String(b))
+    // comparator: (a: T, b: T)  => number = (a, b) => String(a).localeCompare(String(b))
+    comparator: (a: T, b: T)  => number,
 ): T[] {
 
     if (arr.length < 2) {
@@ -19,22 +20,27 @@ function quickSort<T>(
     let i = left;
     let j = right;
 
-    // console.log(arr[i], baseItem);
-
     while (i <= j) {
-
-        while (arr[i] < baseItem) {
         // while (comparator(arr[i], baseItem) < 0) {
-            // console.log(arr[i], baseItem)
-            // console.log(comparator(arr[i], baseItem));
-            i++;
+        while (arr[i] < baseItem) {
+
+            // console.log('LEFT', arr[i], baseItem, 'comparator:', comparator(arr[i], baseItem));
+            if (comparator(arr[i], baseItem) < 0) {
+                i++;
+            }
         }
         
         while (arr[j] > baseItem) {
+        // while (comparator(arr[i], baseItem) >= 0) {
         // while (comparator(arr[i], baseItem) > 0) {
-            console.log(arr[j], baseItem);
-            console.log(comparator(arr[i], baseItem));
-            j--;
+            // console.log(arr[j], baseItem);
+            // console.log(arr[j] > baseItem);
+            // console.log('comparator', comparator(arr[i], baseItem));
+            // console.log('RIGHT', arr[i], baseItem, 'comparator:', comparator(arr[i], baseItem));
+
+            if (comparator(arr[i], baseItem) >= 0) {
+                j--;
+            }
         }
 
         if (i <= j) {
@@ -49,28 +55,32 @@ function quickSort<T>(
     const sepateIndex = i;
 
     if (left < sepateIndex - 1) {
-        quickSort(arr, left, sepateIndex - 1);
+
+        quickSort(arr, left, sepateIndex - 1, comparator);
     }
     if (right > sepateIndex) {
-        quickSort(arr, sepateIndex, right);
+        quickSort(arr, sepateIndex, right, comparator);
     }
     return arr;
 }
 
 // quickSort(arr, 0, arr.length - 1);
 
-function comparator(a: number, b: number) {
+quickSort(arr, 0, arr.length - 1, function(a: number, b: number) {
+    
+    console.log('a', a);
+    console.log('b', b);
+    
+    
     if (a > b) {
         return 1;
     }
     if (a < b) {
-        return -1;
+      return -1;
     }
     // a должно быть равным b
     return 0;
-}
-
-quickSort(arr, 0, arr.length - 1, comparator);
+});
 console.log(arr);
 
 const items = [
