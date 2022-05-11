@@ -38,8 +38,9 @@ export interface List<T> extends Iterable<T> {
 
 
     sort(fn: (a: T, b: T) => number): this;
-    selectSort(): List<T>;
     slice(begin?: number, end?: number): List<T>;
+
+    selectSort(comparator: (a: T, b: T) => number): List<T>;
 
     // foreach(cb: (value: T) => void): void;
 }
@@ -78,58 +79,36 @@ export class LinkedList<T> implements List<T> {
         return iter;
     }
 
-    
+
     sort(fn: (a: T, b: T) => number = (a, b) => String(a).localeCompare(String(b))): this {
         // merge sort      O(n×log₂n)
         // selection sort  O(n²)
         return this;
     };
 
-    #getSmallestValue(): T | null {
-      if (!this.#head) {
-        return null;
+    selectSort(comparator: (a: T, b: T) => number = (a, b) => String(a).localeCompare(String(b))): this {
+
+      if (this.length < 2) {
+        return this;
       }
-      let smallestValue = this.#head.value;
-      for (let current = this.#head; current !== null; current = current.next) {
-        if (current.value < smallestValue) {
-          smallestValue = current.value; 
+
+      for (let current = this.#head, index = 0; current !== null; current = current.next, index++) {
+
+        let smallestItem = current;
+        let smallestValue = current.value;
+
+        for (let nextCurrent = current.next; nextCurrent !== null; nextCurrent = nextCurrent.next) {
+            if (comparator(nextCurrent.value, smallestValue) < 0) {
+                smallestItem = nextCurrent;
+                smallestValue = nextCurrent.value;
+            }
         }
-      }
-      return smallestValue;
-    }
-
-    selectSort(): List<T> {
-      
-      if (!this.#head) {
-        return this;  
+        const changedValue = current.value;
+        current.value = smallestValue;
+        smallestItem.value = changedValue;
       }
 
-      
-      const newList = new LinkedList<T>();
-      
-                                                    //@ts-ignore
-      for (let current = this.#head; current !== null; current = current.next) {
-        newList.push(current.value);
-        // const smalletsValue = this.#getSmallestValue();
-        // newList.unshift(smalletsValue!); // TODO refact getSmallestValue
-        // if (current.next === null && current.prev) {
-        //   current.prev.next = null;
-          
-        // }
-        // if (current.prev === null && current.next) {
-        //   current.next.prev = null;
-        // } 
-       
-        // if (current.prev) { current.prev.next = current.next; }
-        // if (current.next) { current.next.prev = current.prev; }
-      }
-      for (let current = this.#head; current !== null; current = current.next) {
-        const smalletsValue = this.#getSmallestValue();
-      }
-
-
-
-      return newList;
+      return this;
     }
 
 
@@ -252,7 +231,7 @@ export class LinkedList<T> implements List<T> {
             return; // underfined
         }
         this.length -= 1;
-        
+
         const { value } = this.#tail;
 
         if (this.#tail.prev === null) {
@@ -374,7 +353,7 @@ export class LinkedList<T> implements List<T> {
                 return prev;
             }, newList);
         }
-        
+
         // if (begin && begin > 0 && end && end < 0) {
         //     return this.reduce<List<T>>((prev, curr, i) => {
         //         if (i >= begin && i < end) {

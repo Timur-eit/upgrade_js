@@ -1,6 +1,6 @@
 import { LinkedList, List } from '../../data_structures/List';
 
-describe.skip('LinkedList', () => {
+describe('LinkedList', () => {
 
     const data1 = 'abc';
     const data2 = 'qwe';
@@ -309,7 +309,8 @@ describe.skip('LinkedList', () => {
       
     });
 
-  test.skip('method selectSort() return sorted list', () => {
+  test('method selectSort() return sorted list', () => {
+    
     const list = new LinkedList<number>();
     list.push(100);
     list.push(55);
@@ -317,8 +318,25 @@ describe.skip('LinkedList', () => {
     list.push(10);
     list.push(15);
     list.push(1);
+    
+    // console.log('sorted arr', Array.from(list.selectSort(comparator)));
+    // console.log('arr', Array.from(list));
 
-    expect<number[]>(Array.from(list.selectSort())).toEqual<number[]>([1, 10, 15, 55, 100, 200]);
-  })
+    function comparator(a: number, b: number) {
+        if (a > b) {
+            return 1;
+        }
+        if (a < b) {
+            return -1;
+        }
+        return 0;
+    }
+    
+    expect<number[]>(
+        Array.from(list.selectSort(comparator))
+    ).toEqual<number[]>([1, 10, 15, 55, 100, 200]);
+        
+        
+  });
 
 });
