@@ -1,5 +1,6 @@
 type ListNode<T> = {
   value: T;
+  index: number;
   prev: ListNode<T> | null;
   next: ListNode<T> | null;
 }
@@ -41,6 +42,7 @@ export interface List<T> extends Iterable<T> {
     slice(begin?: number, end?: number): List<T>;
 
     selectSort(comparator: (a: T, b: T) => number): List<T>;
+    quickSort(comparator: (a: T, b: T) => number): List<T>;
 
     // foreach(cb: (value: T) => void): void;
 }
@@ -79,6 +81,14 @@ export class LinkedList<T> implements List<T> {
         return iter;
     }
 
+    showIndex() { // just for testing
+      const indexColl = [];
+      for (let current = this.#head; current !== null; current = current.next) {
+        indexColl.push(current.index);
+      }
+      return indexColl;
+    }
+
 
     sort(fn: (a: T, b: T) => number = (a, b) => String(a).localeCompare(String(b))): this {
         // merge sort      O(n×log₂n)
@@ -111,12 +121,31 @@ export class LinkedList<T> implements List<T> {
       return this;
     }
 
+    quickSort(
+      left: number,
+      right; number,
+      comparator: (a: T, b: T) => number = (a, b) => String(a).localeCompare(String(b))
+    ): this {
+      if (this.length < 0) {
+        return this;
+      }
+
+     let baseItemIndex = Math.floor((left + right) / 2)]
+    // как сортировать списки ? без обращения по индексу
+      
+      return this;
+    }
+
 
     public push(value: T): void {
-        const newNode: ListNode<T> = {
+        
+      const index = this.#tail ? this.#tail.index + 1 : 0;
+      
+      const newNode: ListNode<T> = {
             value: value,
             prev: this.#tail,
             next: null,
+            index: index,
         };
 
         if (!this.#head || !this.#tail) {
@@ -130,10 +159,12 @@ export class LinkedList<T> implements List<T> {
     }
 
     public unshift(value: T): void {
-        const newNode: ListNode<T> = {
+      
+      const newNode: ListNode<T> = {
             value: value,
             prev: null,
             next: this.#head,
+            index: 0,
         };
 
         if (!this.#head || !this.#tail) {
@@ -142,6 +173,10 @@ export class LinkedList<T> implements List<T> {
         } else {
             this.#head.prev = newNode;
             this.#head = newNode;
+        }
+
+        for (let current = this.#head.next, i = 1; current !== null; current = current.next, i++) {
+          current.index = i;
         }
         this.length += 1;
     }
